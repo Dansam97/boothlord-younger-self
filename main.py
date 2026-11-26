@@ -10,8 +10,8 @@ sentence, no explanation.
 import os
 
 ENTRY = (
-    "Stop hiding your report card in the piano bench \u2014 Mum already knows, "
-    "and the lie will cost you more than the grades ever did."
+    "You will not remember the nights you slept early, so stay at the table, "
+    "laugh too loud, and let Grandma win the argument about the extra serving."
 )
 
 OUTPUT_PATH = os.path.join(
@@ -39,9 +39,13 @@ def main():
         handle.write(text)
     # Read the file back: a truncated or altered write must fail loudly
     # rather than ship a gate-invalid entry.
-    written = open(OUTPUT_PATH, encoding="utf-8").read()
+    with open(OUTPUT_PATH, encoding="utf-8") as handle:
+        written = handle.read()
     if written != text:
-        raise ValueError("read-back mismatch: entry.txt does not match ENTRY")
+        raise ValueError(
+            "read-back mismatch: entry.txt holds %d chars, expected %d"
+            % (len(written), len(text))
+        )
     print("wrote %d chars to %s" % (len(written), OUTPUT_PATH))
 
 
